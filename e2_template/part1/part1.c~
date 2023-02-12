@@ -1,0 +1,42 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <signal.h>
+#include <time.h>
+#include "address_map_arm.h"
+#include "physical.h"
+
+
+/**  your part 1 user code here  **/
+int chartohex(char c){
+	switch(c){
+		case 'I':
+			return 0x04;
+		case 'n':
+			return 0x54;
+		case 't':
+			return 0x78;
+		case 'e':
+			return 0x79;
+		case 'l':
+			return 0x38;
+		case 'S':
+			return 0x6D;
+		case 'o':
+			return 0x5C;
+		case 'C':
+			return 0x39;
+		case 'F':
+			return 0x71;
+		case 'P':
+			return 0x73;
+		case 'G':
+			return 0x83;
+		case 'A':
+			return 0x77;
+		default:
+			return 0x00;
+	}
+
+}
