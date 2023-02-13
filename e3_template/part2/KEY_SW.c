@@ -14,7 +14,7 @@ volatile int *SW_ptr;
 static int KEY_registered = 0;
 static char KEY_msg[2];
 static int SW_registered = 0;
-static char SW_msg[4];
+static char SW_msg[5];
 
 
 static int KEY_open (struct inode *, struct file *);
@@ -96,7 +96,7 @@ static int SW_release(struct inode *inode, struct file *file)
 
 static ssize_t SW_read(struct file *filp, char *buffer, size_t length, loff_t *offset)
 {
-    sprintf (SW_msg, "%x\n", *(SW_ptr));
+    sprintf (SW_msg, "%.3x\n", *(SW_ptr));
     size_t bytes;
     bytes = strlen (SW_msg) - (*offset);    // how many bytes not yet sent?
     bytes = bytes > length ? length : bytes;     // too much to send all at once?
