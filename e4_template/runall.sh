@@ -96,9 +96,8 @@ case "$1" in
     echo "---     Installing built in KEY, SW, and LEDR drivers                   ---"
     echo "---     (if you prefer to use your own drivers, modify this script as   ---"
     echo "---     needed and include your compiled drivers with your submission)  ---"
-    insmod /home/root/Linux_Libraries/drivers/SW.ko
-    insmod /home/root/Linux_Libraries/drivers/KEY.ko
-    insmod /home/root/Linux_Libraries/drivers/LEDR.ko
+    insmod /home/root/Desktop/e3/part2/KEY_SW.ko
+    insmod /home/root/Desktop/e3/part3/LEDR_HEX.ko
     cd ../part3 && make clean && make
     echo ""
     echo "---     Running Part 3 (Ctrl-C to quit)          ---"

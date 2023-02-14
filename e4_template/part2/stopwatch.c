@@ -50,7 +50,7 @@ static int stopwatch_registered = 0;
 static char stopwatch_msg[MAX_SIZE];  // the character array that can be read or written
 static char input_msg[MAX_SIZE];
 bool stop = false;
-bool display = false;
+bool display = true;
 irq_handler_t irq_handler(int irq, void* dev_id, struct pt_regs* regs)
 {
     *TIMER0_ptr &= 0UL << 0;
@@ -155,6 +155,7 @@ static ssize_t stopwatch_write(struct file *filp, char *buffer, size_t length, l
         bytes = MAX_SIZE - 1;
     if (copy_from_user (input_msg, buffer, bytes) != 0)
         printk (KERN_ERR "Error: copy_from_user unsuccessful");
+	input_msg[bytes] = '\0';
     char input[bytes];
     sscanf(input_msg, "%s", input);
     if (strcmp(input, "run")==0){
@@ -178,9 +179,17 @@ static ssize_t stopwatch_write(struct file *filp, char *buffer, size_t length, l
         int m,s,d;
         i = sscanf(input_msg, "%02d:%02d:%02d", &m, &s, &d);
         if (i==3){
-            ss = s;
-            mm = m;
-            dd = d;
+            if (s!=-1){
+                ss = s;
+            }
+            if (m!=-1){
+                mm = m;
+            }
+            if (d!=-1){
+                dd = d;
+            }
+		*HEX3_HEX0_ptr = seven_seg_digits_decode_gfedcba[ss/10]<<24 | seven_seg_digits_decode_gfedcba[ss%10]<<16 | seven_seg_digits_decode_gfedcba[dd/10]<<8 | seven_seg_digits_decode_gfedcba[dd%10];
+	    *HEX5_HEX4_ptr = seven_seg_digits_decode_gfedcba[mm/10]<<8 | seven_seg_digits_decode_gfedcba[mm%10];
         }
     }
     // Note: we do NOT update *offset; we just copy the data into chardev_msg
