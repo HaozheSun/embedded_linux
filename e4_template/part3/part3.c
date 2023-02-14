@@ -37,7 +37,7 @@ int main (void){
         printf("Error opening /dev/stopwatch: %s\n", strerror(errno));
         return -1;
     }
-    
+    write(fd4, "disp", 4);
     
     char sw[3]="000";
     while(running){

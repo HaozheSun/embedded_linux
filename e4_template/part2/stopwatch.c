@@ -50,7 +50,7 @@ static int stopwatch_registered = 0;
 static char stopwatch_msg[MAX_SIZE];  // the character array that can be read or written
 static char input_msg[MAX_SIZE];
 bool stop = false;
-bool display = true;
+bool display = false;
 irq_handler_t irq_handler(int irq, void* dev_id, struct pt_regs* regs)
 {
     *TIMER0_ptr &= 0UL << 0;
