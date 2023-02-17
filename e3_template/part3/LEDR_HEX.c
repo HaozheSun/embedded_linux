@@ -16,7 +16,7 @@ volatile int *HEX5_HEX4_ptr;
 static int LEDR_registered = 0;
 static char LEDR_msg[3];
 static int HEX_registered = 0;
-static int HEX_msg[6];
+static char HEX_msg[6];
 
 const unsigned char seven_seg_digits_decode_gfedcba[10]= {
 /*  0     1     2     3     4     5     6     7     8     9 */
@@ -62,6 +62,28 @@ static ssize_t LEDR_write(struct file *filp, char *buffer, size_t length, loff_t
         bytes = 3;
     if (copy_from_user (LEDR_msg, buffer, bytes) != 0)
         printk (KERN_ERR "Error: copy_from_user unsuccessful");
+
+    //Help and error checking
+    if ((length == 3) && (LEDR_msg[0] == '-') && (LEDR_msg[1] == '-')) {
+        printk(KERN_ERR "Intel FPGA sample device driver \n");
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "       HHH, where H is hexadeciaml, will ignore input after 3rd one\n");
+        return length;
+    }
+    int i = 0;
+
+    while (i < length - 1) {
+        if (!((LEDR_msg[i] >= '0') && (LEDR_msg[i] <= '9') ||
+            (LEDR_msg[i] >= 'a') && (LEDR_msg[i] <= 'f') ||
+            (LEDR_msg[i] >= 'A') && (LEDR_msg[i] <= 'F')
+            )) {
+            printk(KERN_ERR "Error type -- for help \n");
+            return length;
+        }
+        i++;
+    }
+
+
     unsigned LEDR_num;
     sscanf (LEDR_msg, "%x", &LEDR_num);
     *LEDR_ptr = LEDR_num;
@@ -107,9 +129,34 @@ static ssize_t HEX_write(struct file *filp, char *buffer, size_t length, loff_t 
 
     if (bytes > 6)    // can copy all at once, or not?
         bytes = 6;
+
+
+
+    
     if (copy_from_user (HEX_msg, buffer, bytes) != 0)
         printk (KERN_ERR "Error: copy_from_user unsuccessful");
+    
+
+
+    //Help and error checking
+    if ((length == 3) && (HEX_msg[0] == '-') && (HEX_msg[1] == '-')) {
+        printk(KERN_ERR "Intel FPGA sample device driver \n");
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "       DDDDDD, where 0 >= D <= 9, will ignore input after 6th one\n");
+        return length;
+    }
+    int i = 0;
+
+    while ( i < length - 1) {
+        if (!((HEX_msg[i] >= '0') && (HEX_msg[i] <= '9'))) {
+            printk(KERN_ERR "Error type -- for help \n");
+            return length;
+        }
+        i++;
+    }
+
     unsigned HEX_num;
+
     sscanf (HEX_msg, "%d", &HEX_num);
     *HEX3_HEX0_ptr = seven_seg_digits_decode_gfedcba[(HEX_num/1000)%10]<<24 | seven_seg_digits_decode_gfedcba[(HEX_num/100)%10]<<16 | seven_seg_digits_decode_gfedcba[(HEX_num/10)%10]<<8 | seven_seg_digits_decode_gfedcba[HEX_num%10];
 	*HEX5_HEX4_ptr = seven_seg_digits_decode_gfedcba[(HEX_num/100000)%10]<<8 | seven_seg_digits_decode_gfedcba[(HEX_num/10000)%10];
