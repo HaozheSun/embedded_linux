@@ -29,3 +29,9 @@ These errors can be ignored.
 
 If you would like to clarify your interpretation of the exercise instructions 
 or provide any additional information to the grader, PLEASE TYPE IT HERE:
+
+In part3 and part4 we used our drivers from e3, therefore we changed runall.sh
+and add drivers in e3_driver folder.
+
+For part4, everytime user got 5 questions correct, the diffcultly will increase by 1 more digit. After the game start the user is not allow to change timer. 
+At the end of the game after time expired, it will show the average times.
