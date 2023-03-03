@@ -192,6 +192,7 @@ static ssize_t stopwatch_write(struct file *filp, char *buffer, size_t length, l
 	    *HEX5_HEX4_ptr = seven_seg_digits_decode_gfedcba[mm/10]<<8 | seven_seg_digits_decode_gfedcba[mm%10];
         }
     }
+    sprintf(stopwatch_msg, "%02d:%02d:%02d\n", mm, ss, dd);
     // Note: we do NOT update *offset; we just copy the data into chardev_msg
     return bytes;
 }

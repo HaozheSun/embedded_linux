@@ -127,6 +127,9 @@ int main (void){
             write(fd4, &msg, strlen(msg));
         }
     }
+    char clean[4] = "0000";
+    write(fd3, &clean, strlen(clean));
+    write(fd4, "nodisp", 6);
     close(fd1);
     close(fd2);
     close(fd3);
