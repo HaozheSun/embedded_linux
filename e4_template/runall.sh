@@ -138,11 +138,13 @@ case "$1" in
    rmmod -f SW
    rmmod -f KEY
    rmmod -f LEDR
+   rmmod -f KEY_SW
+   rmmod -f LEDR_HEX
    cd part1 && make clean && cd ../
    cd part2 && make clean && cd ../
    cd part3 && make clean && cd ../
    cd part4 && make clean && cd ../
-   tar -cjvf e4_$(date "+%Y.%m.%d-%H.%M.%S").tar.bz2 part1 part2 part3 part4 include README runall.sh
+   tar -cjvf e4_$(date "+%Y.%m.%d-%H.%M.%S").tar.bz2 part1 part2 part3 part4 include e3_driver README runall.sh
    ;;
 
 *) echo "Usage : ./runall.sh 1 | 2 | 3 | 4 | clean | submit"
