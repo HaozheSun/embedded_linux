@@ -179,7 +179,9 @@ int main(void) {
        
 
         while (running) {
-            scanf("%d", &entered);
+            char input[50];
+            scanf("%s", &input);
+            entered = atoi(input);
             printf("\033[1A");
             printf("\033[10C");
             printf("        %c%c%c%c%c%c%c%c \n", timeleft[0], timeleft[1], timeleft[2], timeleft[3], timeleft[4], timeleft[5], timeleft[6], timeleft[7]);
@@ -190,6 +192,7 @@ int main(void) {
                 running = 0;
                 break;
             }
+          
 
             if (entered != answer && running==1) {
                 printf("Try again: ");
