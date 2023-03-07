@@ -30,7 +30,8 @@ void plot_line(int x0, int y0, int x1, int y1, char color, char c) {
     int error = -(dx / 2);
     int y = y0;
     int y_step = (y0 < y1) ? 1 : -1;
-    for (int x = x0; x <= x1; x++) {
+    int x = x0;
+    for (x = x0; x <= x1; x++) {
         if (is_steep) {
             plot_pixel(y, x, color, c);
         } else {
@@ -58,7 +59,7 @@ int main(void)
     ts.tv_sec = 0;
     ts.tv_nsec = 100000000;
     while(running){
-        singal(SIGINT, sigint_handler);
+        signal(SIGINT, sigint_handler);
         plot_line(1, y, 80, y, CYAN, '*');
         nanosleep(&ts, NULL);
         printf ("\e[2J"); // clear the screen
