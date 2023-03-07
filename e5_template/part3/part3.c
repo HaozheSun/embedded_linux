@@ -44,20 +44,30 @@ void plot_line(int x0, int y0, int x1, int y1, char color, char c) {
     }
 }
 
+int running = 1;
+void sigint_handler(int sig) {
+    running = 0;
+}
 int main(void)
 {
-    char c;
-    int i;
     printf ("\e[2J"); // clear the screen
     printf ("\e[?25l"); // hide the cursor
-
-    plot_line(1, 1, 80, 24, CYAN, '*');
-    plot_line(80, 24, 1, 1, RED, '*');
-    plot_line(40, 8, 40, 18, YELLOW, '*');
-    plot_line(1, 24, 80, 1, GREEN, '*');
-    plot_line(1, 24, 80, 12, BLUE, '*');
-    plot_line(1, 24, 80, 24, MAGENTA, '*');
-    c = getchar (); // wait for user to press return
+    int y=1;
+    int y_step = 1;
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 100000000;
+    while(running){
+        singal(SIGINT, sigint_handler);
+        plot_line(1, y, 80, y, CYAN, '*');
+        nanosleep(&ts, NULL);
+        printf ("\e[2J"); // clear the screen
+        y += y_step;
+        if (y == 24 || y == 1) {
+            y_step = -y_step;
+        }
+    }
+    
     printf ("\e[2J"); // clear the screen
     printf ("\e[%2dm", WHITE); // reset foreground color
     printf ("\e[%d;%dH", 1, 1); // move cursor to upper left
