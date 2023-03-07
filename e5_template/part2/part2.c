@@ -4,6 +4,12 @@
 /**  your part 2 user code here  **/
 
 //Bresenham’s line-drawing algorithm
+void swap(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 void plot_pixel(int x, int y, char color, char c) {
     printf ("\e[%2dm\e[%d;%dH%c", color, y, x, c);
     fflush (stdout);
@@ -35,4 +41,26 @@ void plot_line(int x0, int y0, int x1, int y1, char color, char c) {
             error -= dx;
         }
     }
+}
+
+int main(void)
+{
+    char c;
+    int i;
+    printf ("\e[2J"); // clear the screen
+    printf ("\e[?25l"); // hide the cursor
+
+    plot_line(1, 1, 80, 24, CYAN, '*');
+    plot_line(80, 24, 1, 1, RED, '*');
+    plot_line(40, 8, 40, 18, YELLOW, '*');
+    plot_line(1, 24, 80, 1, GREEN, '*');
+    plot_line(1, 24, 80, 12, BLUE, '*');
+    plot_line(1, 24, 80, 24, MAGENTA, '*');
+    c = getchar (); // wait for user to press return
+    printf ("\e[2J"); // clear the screen
+    printf ("\e[%2dm", WHITE); // reset foreground color
+    printf ("\e[%d;%dH", 1, 1); // move cursor to upper left
+    printf ("\e[?25h"); // show the cursor
+    fflush (stdout);
+}
 
