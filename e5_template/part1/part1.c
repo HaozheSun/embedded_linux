@@ -11,10 +11,10 @@ int main(void)
     printf ("\e[2J"); // clear the screen
     printf ("\e[?25l"); // hide the cursor
 
-    plot_pixel (1, 1, CYAN, ’X’);
-    plot_pixel (80, 24, CYAN, ’X’);
+    plot_pixel (1, 1, CYAN, 'X');
+    plot_pixel (80, 24, CYAN, 'X');
     for (i = 8; i < 18; ++i)
-    plot_pixel (40, i + 12, YELLOW, ’*’);
+    plot_pixel (40, i + 12, YELLOW, '*');
 
     c = getchar (); // wait for user to press return
     printf ("\e[2J"); // clear the screen
