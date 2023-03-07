@@ -46,7 +46,6 @@ void plot_line(int x0, int y0, int x1, int y1, char color, char c) {
 int main(void)
 {
     char c;
-    int i;
     printf ("\e[2J"); // clear the screen
     printf ("\e[?25l"); // hide the cursor
 
