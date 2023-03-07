@@ -85,9 +85,8 @@ case "$1" in
     ;;
 3)  echo "---          Setting up Part 3                  ---"
     rmmod -f stopwatch
-    rmmod -f SW
-    rmmod -f KEY
-    rmmod -f LEDR
+    rmmod -f KEY_SW
+    rmmod -f LEDR_HEX
     cd part2 && make clean && make
     echo ""
     echo "---     Installing Part 2 stopwatch driver      ---"
@@ -96,8 +95,8 @@ case "$1" in
     echo "---     Installing built in KEY, SW, and LEDR drivers                   ---"
     echo "---     (if you prefer to use your own drivers, modify this script as   ---"
     echo "---     needed and include your compiled drivers with your submission)  ---"
-    insmod /home/root/Desktop/e3/part2/KEY_SW.ko
-    insmod /home/root/Desktop/e3/part3/LEDR_HEX.ko
+    insmod ../e3_driver/KEY_SW.ko
+    insmod ../e3_driver/LEDR_HEX.ko
     cd ../part3 && make clean && make
     echo ""
     echo "---     Running Part 3 (Ctrl-C to quit)          ---"
@@ -105,9 +104,8 @@ case "$1" in
     ;;
 4)  echo "---            Setting up Part 4                 ---"
     rmmod -f stopwatch
-    rmmod -f SW
-    rmmod -f KEY
-    rmmod -f LEDR
+    rmmod -f KEY_SW
+    rmmod -f LEDR_HEX
     cd part2 && make clean && make
     echo ""
     echo "---     Installing Part 2 stopwatch driver      ---"
@@ -116,9 +114,8 @@ case "$1" in
     echo "---     Installing built in KEY, SW, and LEDR drivers                   ---"
     echo "---     (if you prefer to use your own drivers, modify this script as   ---"
     echo "---     needed and include your compiled drivers with your submission)  ---"
-    insmod /home/root/Linux_Libraries/drivers/SW.ko
-    insmod /home/root/Linux_Libraries/drivers/KEY.ko
-    insmod /home/root/Linux_Libraries/drivers/LEDR.ko
+    insmod ../e3_driver/KEY_SW.ko
+    insmod ../e3_driver/LEDR_HEX.ko
     cd ../part4 && make clean && make
     echo ""
     echo "---     Running Part 4 (Ctrl-C to quit)          ---"
@@ -129,6 +126,8 @@ case "$1" in
     rmmod -f SW
     rmmod -f KEY
     rmmod -f LEDR
+    rmmod -f KEY_SW
+    rmmod -f LEDR_HEX
     cd part1 && make clean && cd ../
     cd part2 && make clean && cd ../
     cd part3 && make clean && cd ../
@@ -139,11 +138,13 @@ case "$1" in
    rmmod -f SW
    rmmod -f KEY
    rmmod -f LEDR
+   rmmod -f KEY_SW
+   rmmod -f LEDR_HEX
    cd part1 && make clean && cd ../
    cd part2 && make clean && cd ../
    cd part3 && make clean && cd ../
    cd part4 && make clean && cd ../
-   tar -cjvf e4_$(date "+%Y.%m.%d-%H.%M.%S").tar.bz2 part1 part2 part3 part4 include README runall.sh
+   tar -cjvf e4_$(date "+%Y.%m.%d-%H.%M.%S").tar.bz2 part1 part2 part3 part4 include e3_driver README runall.sh
    ;;
 
 *) echo "Usage : ./runall.sh 1 | 2 | 3 | 4 | clean | submit"

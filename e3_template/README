@@ -1,3 +1,6 @@
+Yuanzhuo Wang 1003149416
+Haozhe Sun 1004065780
+
 To facilitate accurate marking, your submitted solution must use this template.
 
 To complete each part of the exercise, add your own code to the following files:
@@ -28,3 +31,6 @@ These errors can be ignored.
 
 If you would like to clarify your interpretation of the exercise instructions 
 or provide any additional information to the grader, PLEASE TYPE IT HERE:
+part3:
+Both LEDR, HEX have "--" help usage, and input error checking. It will tell the user if the 
+input is incorrect.
