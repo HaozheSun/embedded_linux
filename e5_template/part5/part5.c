@@ -94,7 +94,7 @@ int main(void)
     printf("\e[?25l"); // hide the cursor
     struct timespec ts;
     ts.tv_sec = 0;
-    ts.tv_nsec = 200000000;
+    ts.tv_nsec = 100000000;
 
     srand(time(NULL));
 
@@ -140,8 +140,8 @@ int main(void)
 
             ts.tv_nsec = ts.tv_nsec / 2;
 
-            if (ts.tv_nsec < 200000000 / 8) {
-                ts.tv_nsec = 200000000 / 8;
+            if (ts.tv_nsec < 100000000 / 8) {
+                ts.tv_nsec = 100000000 / 8;
             }
          
         }
@@ -149,8 +149,8 @@ int main(void)
 
             ts.tv_nsec = ts.tv_nsec * 2;
 
-            if (ts.tv_nsec > 8 * 200000000) {
-                ts.tv_nsec = 8 * 200000000;
+            if (ts.tv_nsec > 8 * 100000000) {
+                ts.tv_nsec = 8 * 100000000;
             }
         
 
