@@ -94,17 +94,18 @@ int main(void)
     printf("\e[?25l"); // hide the cursor
     struct timespec ts;
     ts.tv_sec = 0;
-    ts.tv_nsec = 100000000000000;
+    ts.tv_nsec = 200000000;
+
     srand(time(NULL));
 
-    int x_cor[20];
-    int y_cor[20];
-    int c[20];
-    int x_add[20];
-    int y_add[20];
+    int x_cor[25];
+    int y_cor[25];
+    int c[25];
+    int x_add[25];
+    int y_add[25];
     int i;
     int display = 1;
-    double speed = 1;
+   
     int number = 5;
 
     for (i = 0; i < 5; i++) {
@@ -137,12 +138,20 @@ int main(void)
 
         if (key == 1) {
 
-            speed = speed * 2;
+            ts.tv_nsec = ts.tv_nsec / 2;
+
+            if (ts.tv_nsec < 200000000 / 8) {
+                ts.tv_nsec = 200000000 / 8;
+            }
          
         }
         else if (key == 2) {
 
-            speed = speed / 2;
+            ts.tv_nsec = ts.tv_nsec * 2;
+
+            if (ts.tv_nsec > 8 * 200000000) {
+                ts.tv_nsec = 8 * 200000000;
+            }
         
 
         }
@@ -150,8 +159,8 @@ int main(void)
 
          
             number = number + 1;
-            if (number >  20) {
-                number = 20;
+            if (number >  25) {
+                number = 25;
             }
             else {
                 x_cor[number-1] = rand() % ((80 + 1) - 1) + 1;
@@ -185,7 +194,7 @@ int main(void)
         }
 
         for (i = 0; i < number; i++) {
-            x_cor[i] = x_cor[i] + x_add[i]* speed;
+            x_cor[i] = x_cor[i] + x_add[i];
 
             if (x_cor[i] >= 80) {
                 x_cor[i] = 80;
@@ -195,7 +204,7 @@ int main(void)
             }
 
 
-            y_cor[i] = y_cor[i] + y_add[i]* speed;
+            y_cor[i] = y_cor[i] + y_add[i];
 
             if (y_cor[i] >= 24) {
                 y_cor[i] = 24;
