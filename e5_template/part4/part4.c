@@ -98,10 +98,8 @@ int main(void)
     while (running) {
         signal(SIGINT, sigint_handler);
         plot_animation(x_cor, y_cor,  c);
-        for ( i = 0; i < 5; i++) {
-              x_cor[i] = x_cor[i] + x_add[i];
-              y_cor[i] = y_cor[i] + y_add[i];
-        }
+
+
         for (i = 0; i < 5; i++) {
             if (x_cor[i] == 80 || x_cor[i] == 1) {
                 x_add[i] = x_add[i] * -1;
@@ -111,6 +109,30 @@ int main(void)
             }
 
         }
+
+        for ( i = 0; i < 5; i++) {
+              x_cor[i] = x_cor[i] + x_add[i];
+
+              if (x_cor[i] >= 80 ) {
+                  x_cor[i] = 80;
+              }
+              if (x_cor[i] <= 1) {
+                  x_cor[i] = 1;
+              }
+
+
+              y_cor[i] = y_cor[i] + y_add[i];
+
+              if (y_cor[i] >= 24) {
+                  y_cor[i] = 24;
+              }
+              if (y_cor[i] <= 1) {
+                  y_cor[i] = 1;
+              }
+
+
+        }
+ 
         nanosleep(&ts, NULL);
         printf("\e[2J"); // clear the screen
  
