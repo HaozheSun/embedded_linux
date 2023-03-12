@@ -25,11 +25,10 @@ int main(int argc, char *argv[])
     read(video_FD , buffer, video_BYTES);
     sscanf(buffer, "%d %d", &screen_x, &screen_y);
     // Use pixel commands to color some pixels on the screen
-    char color_hex[7];
     for (x=0; x<screen_x; x++) {
         for (y=0; y<screen_y; y++) {
-            sprintf(color_hex, "0x%.4x", rand()%65536);
-            sprintf(command, "pixel %d,%d %s", x, y, color_hex);
+            
+            sprintf(command, "pixel %d,%d %s", x, y, "0x12ff");
             write(video_FD, command, strlen(command));
         }
     }
