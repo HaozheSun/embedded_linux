@@ -16,7 +16,7 @@ volatile int * FPGA_ONCHIP_virtual;
 int pixel_buffer;
 int back_buffer;
 int resolution_x, resolution_y; // screen resolution
-
+#define ABS(x)				(((x) > 0) ? (x) : -(x))
 static int device_open (struct inode *, struct file *);
 static int device_release (struct inode *, struct file *);
 static ssize_t device_read (struct file *, char *, size_t, loff_t *);
@@ -45,6 +45,12 @@ static int video_registered = 0;
 static char video_msg[MAX_SIZE];  // the character array that can be read
 static char input_msg[MAX_SIZE];
 
+void swapint(int *a, int *b) {
+    int temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
 void plot_pixel(int x, int y, short int color) {
     *(short int *)(back_buffer + (y << 10) + (x << 1)) = color;
 }
@@ -60,6 +66,38 @@ void clear_screen(void) {
     for (y = 0; y < resolution_y; y++) {
         for (x = 0; x < resolution_x; x++) {
             plot_pixel(x, y, 0);
+        }
+    }
+}
+
+
+
+void plot_line(int x0, int y0, int x1, int y1, char color) {
+    int is_steep = (ABS(y1 - y0) > ABS(x1 - x0));
+    if (is_steep) {
+        swapint(&x0, &y0);
+        swapint(&x1, &y1);
+    }
+    if (x0>x1){
+        swapint(&x0, &x1);
+        swapint(&y0, &y1);
+    }
+    int dx = x1 - x0;
+    int dy = ABS(y1 - y0);
+    int error = -(dx / 2);
+    int y = y0;
+    int y_step = (y0 < y1) ? 1 : -1;
+    int x = x0;
+    for (x = x0; x <= x1; x++) {
+        if (is_steep) {
+            plot_pixel(y, x, color);
+        } else {
+            plot_pixel(x, y, color);
+        }
+        error += dy;
+        if (error >= 0) {
+            y += y_step;
+            error -= dx;
         }
     }
 }
@@ -168,11 +206,19 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
     // Note: we do NOT update *offset; we just copy the data into input_msg
     char command[bytes];
     int i=0;
-    int x,y,c;
-    i = sscanf(input_msg, "%s %03d,%03d %04x",command, &x, &y, &c);
-    if (i == 4) {
-        if (strcmp(command, "pixel") == 0) {
-            plot_pixel(x, y, c);
+    i = sscanf(input_msg, "%s",command);
+    int x1,x2,y1,y2,c;
+    if (strcmp(command, "pixel") == 0) {
+        i = sscanf(input_msg, "%s %03d,%03d %04x",command, &x1, &y1, &c);
+        if (i == 4) {
+            plot_pixel(x1, y1, c);
+        }
+    }
+    if(strcmp(command, "line") == 0) {
+        
+        i = sscanf(input_msg, "%s %03d,%03d %03d,%03d %04x",command, &x1, &y1, &x2, &y2, &c);
+        if (i == 6) {
+            plot_line(x1, y1, x2, y2, c);
         }
     }
     if (strcmp(command, "clear") == 0) {
