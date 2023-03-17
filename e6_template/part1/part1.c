@@ -32,8 +32,8 @@ int main(int argc, char *argv[])
             write(video_FD, command, strlen(command));
         }
     }
-    sprintf(command, "sync");
-    write(video_FD, command, strlen(command));
+   // sprintf(command, "sync");
+   // write(video_FD, command, strlen(command));
     close (video_FD);
     return 0;
 }

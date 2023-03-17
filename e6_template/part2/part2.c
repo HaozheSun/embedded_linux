@@ -28,8 +28,8 @@ int main(int argc, char *argv[])
     write (video_FD, command, strlen(command)); 
     sprintf (command, "line %d,%d %d,%d %X\n", 0, screen_y - 1, (screen_x >> 2) - 1, 0, 0x07E0);
     write (video_FD, command, strlen(command));
-    sprintf(command, "sync");
-    write(video_FD, command, strlen(command));
+   // sprintf(command, "sync");
+   // write(video_FD, command, strlen(command));
     close (video_FD);
     return 0;
 }

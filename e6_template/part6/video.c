@@ -107,7 +107,7 @@ void clear_screen(void) {
 }
 
 
-void plot_line(int x0, int y0, int x1, int y1, char color) {
+void plot_line(int x0, int y0, int x1, int y1,short int color) {
     int is_steep = (ABS(y1 - y0) > ABS(x1 - x0));
     if (is_steep) {
         swapint(&x0, &y0);
@@ -134,6 +134,16 @@ void plot_line(int x0, int y0, int x1, int y1, char color) {
             y += y_step;
             error -= dx;
         }
+    }
+}
+
+void plot_box(int x0, int y0, int x1, int y1, short int color) {
+
+    int x = x0;
+    for (x = x0; x <= x1; x++) {
+
+        plot_line(x, y0, x, y1, color);
+
     }
 }
 
@@ -235,6 +245,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
 {
     size_t bytes;
     bytes = length;
+    int error = 0;
 
     if (bytes > MAX_SIZE - 1)    // can copy all at once, or not?
         bytes = MAX_SIZE - 1;
@@ -259,12 +270,28 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         if (i == 6) {
             plot_line(x1, y1, x2, y2, c);
         }
+        else {
+            error = 1;
+        }
     }
     else if(strcmp(command, "text") == 0) {
         
         i = sscanf(input_msg, "%s %02d,%02d %s",command, &x1, &y1, text);
         if (i == 4) {
             plot_string(x1, y1, text);
+        }
+        else {
+            error = 1;
+        }
+    }
+    else  if (strcmp(command, "box") == 0) {
+
+        i = sscanf(input_msg, "%s %03d,%03d %03d,%03d %04x", command, &x1, &y1, &x2, &y2, &c);
+        if (i == 6) {
+            plot_box(x1, y1, x2, y2, c);
+        }
+        else {
+            error = 1;
         }
     }
     else if (strcmp(command, "clear") == 0) {
@@ -273,8 +300,36 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
     else if (strcmp(command, "sync") == 0) {
         wait_for_vsync(pixel_ctrl_ptr);
     }
-    else if(strcmp(command, "erase")){
+    else if(strcmp(command, "erase") == 0){
         erase();
+    }
+    else {
+        if (strcmp(command, "--") != 0) {
+            printk(KERN_ERR "Error \n");
+        }
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "Usage: clear\n");
+        printk(KERN_ERR "Usage: sync\n");
+        printk(KERN_ERR "       pixel X,Y color\n");
+        printk(KERN_ERR "       line X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "       box X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "       erase\n");
+        printk(KERN_ERR "       text X,Y string\n");
+        printk(KERN_ERR "Notes: X1,Y1,X2,Y2 are integers, color is 4-digit hex value\n");
+
+    }
+
+    if (error == 1) {
+        printk(KERN_ERR "Error \n");
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "Usage: clear\n");
+        printk(KERN_ERR "Usage: sync\n");
+        printk(KERN_ERR "       pixel X,Y color\n");
+        printk(KERN_ERR "       line X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "       box X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "       erase\n");
+        printk(KERN_ERR "       text X,Y string\n");
+        printk(KERN_ERR "Notes: X1,Y1,X2,Y2 are integers, color is 4-digit hex value\n");
     }
     return bytes;
 }

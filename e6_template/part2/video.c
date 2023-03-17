@@ -72,7 +72,7 @@ void clear_screen(void) {
 
 
 
-void plot_line(int x0, int y0, int x1, int y1, char color) {
+void plot_line(int x0, int y0, int x1, int y1, short int color) {
     int is_steep = (ABS(y1 - y0) > ABS(x1 - x0));
     if (is_steep) {
         swapint(&x0, &y0);
@@ -146,10 +146,10 @@ static int __init start_video(void)
     *(pixel_ctrl_ptr + 1) = FPGA_ONCHIP_BASE;
     back_buffer = (int)FPGA_ONCHIP_virtual;
     clear_screen ();
-    wait_for_vsync (pixel_ctrl_ptr);
-    *(pixel_ctrl_ptr + 1) = SDRAM_BASE;
-    back_buffer = (int)SDRAM_virtual;
-    clear_screen ();
+   // wait_for_vsync (pixel_ctrl_ptr);
+   // *(pixel_ctrl_ptr + 1) = SDRAM_BASE;
+   // back_buffer = (int)SDRAM_virtual;
+    //clear_screen ();
     return err;
 }
 
@@ -197,6 +197,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
 {
     size_t bytes;
     bytes = length;
+    int error = 0;
 
     if (bytes > MAX_SIZE - 1)    // can copy all at once, or not?
         bytes = MAX_SIZE - 1;
@@ -213,20 +214,46 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         if (i == 4) {
             plot_pixel(x1, y1, c);
         }
+        else {
+            error = 1;
+        }
     }
-    if(strcmp(command, "line") == 0) {
+    else if(strcmp(command, "line") == 0) {
         
         i = sscanf(input_msg, "%s %03d,%03d %03d,%03d %04x",command, &x1, &y1, &x2, &y2, &c);
         if (i == 6) {
             plot_line(x1, y1, x2, y2, c);
         }
+        else {
+            error = 1;
+        }
     }
-    if (strcmp(command, "clear") == 0) {
+    else if (strcmp(command, "clear") == 0) {
         clear_screen();
     }
-    if (strcmp(command, "sync") == 0) {
-        wait_for_vsync(pixel_ctrl_ptr);
+    else {
+        if (strcmp(command, "--") != 0) {
+            printk(KERN_ERR "Error \n");
+        }
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "Usage: clear\n");
+        printk(KERN_ERR "Usage: sync\n");
+        printk(KERN_ERR "       pixel X,Y color\n");
+        printk(KERN_ERR "       line X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "Notes: X1,Y1,X2,Y2 are integers, color is 4-digit hex value\n");
+
     }
+
+    if (error == 1) {
+        printk(KERN_ERR "Error \n");
+        printk(KERN_ERR "Usage: -- \n");
+        printk(KERN_ERR "Usage: clear\n");
+        printk(KERN_ERR "Usage: sync\n");
+        printk(KERN_ERR "       pixel X,Y color\n");
+        printk(KERN_ERR "       line X1,Y1 X2,Y2 color\n");
+        printk(KERN_ERR "Notes: X1,Y1,X2,Y2 are integers, color is 4-digit hex value\n");
+    }
+ 
     return bytes;
 }
 
