@@ -226,7 +226,6 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         }
         printk(KERN_ERR "Usage: -- \n");
         printk(KERN_ERR "Usage: clear\n");
-        printk(KERN_ERR "Usage: sync\n");
         printk(KERN_ERR "       pixel X,Y color\n");
         printk(KERN_ERR "Notes: X,Y are integers, color is 4-digit hex value\n");
 
@@ -236,7 +235,6 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         printk(KERN_ERR "Error \n");
         printk(KERN_ERR "Usage: -- \n");
         printk(KERN_ERR "Usage: clear\n");
-        printk(KERN_ERR "Usage: sync\n");
         printk(KERN_ERR "       pixel X,Y color\n");
         printk(KERN_ERR "Notes: X,Y are integers, color is 4-digit hex value\n");
     }

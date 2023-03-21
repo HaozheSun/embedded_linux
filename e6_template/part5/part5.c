@@ -126,13 +126,13 @@ int main(int argc, char* argv[])
 
             
 
-            if (ts.tv_nsec > 8 * 1000000) {
+            if (ts.tv_nsec > 16 * 1000000) {
                 ts.tv_nsec = ts.tv_nsec / 2;
             }
             else {
                 speed = speed * 2;
-                if (speed > 8) {
-                    speed = 8;
+                if (speed > 16) {
+                    speed = 16;
                 }
             }
 
@@ -141,7 +141,7 @@ int main(int argc, char* argv[])
 
             if (speed > 1) {
                 speed = speed / 2;
-            }else if (ts.tv_nsec <= 8 * 1000000) {
+            }else if (ts.tv_nsec <= 16 * 1000000) {
                 ts.tv_nsec = ts.tv_nsec * 2;  
             }
             

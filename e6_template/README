@@ -50,3 +50,6 @@ These errors can be ignored.
 
 If you would like to clarify your interpretation of the exercise instructions 
 or provide any additional information to the grader, PLEASE TYPE IT HERE:
+For part 5 and part 6, the nansleep is 1000000 st_nsec at default, slower will make sleep longer, but faster will make
+rectangle move more in a setp in order to be faster than part 4. We assume the starting rectangles are 5, with min 1 and
+max at 25. 
