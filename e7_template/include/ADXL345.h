@@ -123,5 +123,9 @@ void Pinmux_Config(void);
 #define ADXL345_REG_LATENCY                     0x22
 #define ADXL345_REG_WINDOW                      0x23
 #define ADXL345_REG_TAP_AXES                    0x2A
+#define ADXL345_REG_THRESH_ACT		0x24
+#define ADXL345_REG_THRESH_INACT	0x25
+#define ADXL345_REG_TIME_INACT		0x26
+#define ADXL345_REG_ACT_INACT_CTL	0x27
 
 #endif
