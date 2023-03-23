@@ -136,7 +136,7 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t length, loff_
     else{
         sprintf(accel_msg, "%2X %4d %4d %4d %2d\n", interrupt_source, XYZ[0], XYZ[1], XYZ[2], mg_per_lsb);
     }
-    accel_msg[strlen(msg_accel)] = '\0';
+    accel_msg[strlen(accel_msg)] = '\0';
     bytes = strlen (accel_msg) - (*offset);    // how many bytes not yet sent?
     bytes = bytes > length ? length : bytes;     // too much to send all at once?
     
@@ -175,7 +175,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         //execute calibration routine
         ADXL345_Calibrate();
     }
-    else if (strcmp(command, "format") == 0){
+    /*else if (strcmp(command, "format") == 0){
         int F, G;
         i = sscanf(input_msg, "%s %d %d",command, &F, &G);
         if (i != 3){
@@ -194,7 +194,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
 ////////////////////////////////////////////////////////////////////////////////////////////         
 //////////////////////////////////////////////////////////////////////////////////////////////          
         }
-    }
+    }*/
     else if (strcmp(command, "rate") == 0){
         float R;
         i = sscanf(input_msg, "%s %f",command, &R);

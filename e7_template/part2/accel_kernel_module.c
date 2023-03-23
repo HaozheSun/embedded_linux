@@ -134,7 +134,7 @@ static ssize_t device_read(struct file *filp, char *buffer, size_t length, loff_
     else{
         sprintf(accel_msg, "0 %4d %4d %4d %2d\n" , XYZ[0], XYZ[1], XYZ[2], mg_per_lsb);
     }
-    accel_msg[strlen(msg_accel)] = '\0';
+    accel_msg[strlen(accel_msg)] = '\0';
     bytes = strlen (accel_msg) - (*offset);    // how many bytes not yet sent?
     bytes = bytes > length ? length : bytes;     // too much to send all at once?
     
