@@ -166,7 +166,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
     i = sscanf(input_msg, "%s",command);
     if (strcmp(command, "device") == 0){
         ADXL345_REG_READ(0x00, &devid);
-        printk(KERN_ERR "Device: %u", devid);
+        printk(KERN_ERR "Device: %u\n", devid);
     }
     else if (strcmp(command, "init") == 0){
         ADXL345_Init ();
