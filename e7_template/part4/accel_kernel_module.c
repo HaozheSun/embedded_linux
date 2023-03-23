@@ -196,34 +196,22 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         }
     }*/
     else if (strcmp(command, "rate") == 0){
-        float R;
+        int R;
         i = sscanf(input_msg, "%s %f",command, &R);
         if (i != 2){
             printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
         }
         else{
-            if (R==0.1){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_10);
-            }
-            else if (R==0.2){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_20);
-            }
-            else if (R==0.39){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_39);
-            }
-            else if (R==0.78){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_78);
-            }
-            else if (R==1.56){
+            if (R==1){
                 ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_1_56);
             }
-            else if (R==3.13){
+            else if (R==3){
                 ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_3_13);
             }
-            else if (R==6.25){
+            else if (R==6){
                 ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_6_25);
             }
-            else if (R==12.5){
+            else if (R==12){
                 ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_12_5);
             }
             else if (R==25){
@@ -261,7 +249,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         printk(KERN_ERR "init: initializes the accelerometer\n");
         printk(KERN_ERR "calibrate: calibrates the accelerometer\n");
         printk(KERN_ERR "format F G: sets the data format to fixed 10-bit resolution (F=0) or full resolution(F=1), with range G=+/-2,4,8,16g\n");
-        printk(KERN_ERR "rate R: sets the output data rate to R Hz, R is one of: 0.1, 0.2, 0.39, 0.78, 1.56, 3.13, 6.25, 12.5, 25, 50, 100, 200, 400, 800, 1600, 3200\n");
+        printk(KERN_ERR "rate R: sets the output data rate to R Hz, R is one of: 1, 3, 6, 12, 25, 50, 100, 200, 400, 800, 1600, 3200\n");
     }
     else{
         printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
