@@ -201,10 +201,10 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         }
         else{
             if (R==0.1){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_1);
+                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_10);
             }
             else if (R==0.2){
-                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_2);
+                ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_20);
             }
             else if (R==0.39){
                 ADXL345_REG_WRITE(ADXL345_REG_BW_RATE, XL345_RATE_0_39);
