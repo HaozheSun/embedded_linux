@@ -175,7 +175,7 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         //execute calibration routine
         ADXL345_Calibrate();
     }
-    /*else if (strcmp(command, "format") == 0){
+    else if (strcmp(command, "format") == 0){
         int F, G;
         i = sscanf(input_msg, "%s %d %d",command, &F, &G);
         if (i != 3){
@@ -183,21 +183,41 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         }
         else{
             //need to set G
-///////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-            if (F == 0){
-                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, XL345_10BIT | );
+       
+            int range = XL345_RANGE_16G;
+
+            if (G == 2) {
+                range = XL345_RANGE_2G;
             }
-            else if (F == 1){
-                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, XL345_FULL_RESOLUTION |);
+            else if (G == 4) {
+                range = XL345_RANGE_4G;
             }
-////////////////////////////////////////////////////////////////////////////////////////////         
-//////////////////////////////////////////////////////////////////////////////////////////////          
+            else if (G == 8) {
+                range = XL345_RANGE_8G;
+            }
+            else if (G == 16) {
+                range = XL345_RANGE_16G;
+            }
+            else {
+                printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
+            }
+
+    
+            if (F == 0) {
+                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, range | XL345_10BIT);
+            }
+            else if (F == 1) {
+                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, range | XL345_FULL_RESOLUTION);
+            }
+            else {
+                printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
+            }
+       
         }
-    }*/
+    }
     else if (strcmp(command, "rate") == 0){
         int R;
-        i = sscanf(input_msg, "%s %f",command, &R);
+        i = sscanf(input_msg, "%s %d",command, &R);
         if (i != 2){
             printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
         }

@@ -30,7 +30,7 @@ int main(int argc, char *argv[])
         {
             if(ready)
             {
-                printf("x: %d, y: %d, z: %d, mg_per_lsb: %d\n", x, y, z, mg_per_lsb);
+                printf("x: %d, y: %d, z: %d, mg_per_lsb: %d\n", x* mg_per_lsb, y* mg_per_lsb, z* mg_per_lsb, mg_per_lsb);
             }
         }
     }

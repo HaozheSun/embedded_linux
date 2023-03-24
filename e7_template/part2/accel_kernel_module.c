@@ -50,16 +50,16 @@ int16_t XYZ[3]={0,0,0};
 void ADXL345_TAP(void)
 {
     //Tap threshold set at 3g
-    ADXL345_REG_WRITE(ADXL345_REG_THRESH_TAP, 0x2F);
+    ADXL345_REG_WRITE(ADXL345_REG_THRESH_TAP, 0x30);
 
     //Tap duration set at 0.02s
-    ADXL345_REG_WRITE(ADXL345_REG_DURATION, 0x1F);
+    ADXL345_REG_WRITE(ADXL345_REG_DURATION, 0x20);
 
     //Tap latency set at 0.02s
     ADXL345_REG_WRITE(ADXL345_REG_LATENCY, 0xF);
 
     //Tap window set at 0.3s
-    ADXL345_REG_WRITE(ADXL345_REG_WINDOW, 0xEF);
+    ADXL345_REG_WRITE(ADXL345_REG_WINDOW, 0xF0);
 
     //Enable tap in axes
     ADXL345_REG_WRITE(ADXL345_REG_TAP_AXES, 0x1);
@@ -181,21 +181,40 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
         }
         else{
             //need to set G
+            int range = XL345_RANGE_16G;
+
+            if (G == 2) {
+                range = XL345_RANGE_2G;
+            }
+            else if (G == 4) {
+                range = XL345_RANGE_4G;
+            }else if (G == 8) {
+                range = XL345_RANGE_8G;
+            }else if (G == 16) {
+                range = XL345_RANGE_16G;
+            }
+            else {
+                printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
+            }
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
-            if (F == 0){
-                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, XL345_10BIT | );
+            if (F == 0 ){
+                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT,  range | XL345_10BIT );
             }
             else if (F == 1){
-                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, XL345_FULL_RESOLUTION |);
+                ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT,  range| XL345_FULL_RESOLUTION);
+            }
+            else {
+                printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
             }
 ////////////////////////////////////////////////////////////////////////////////////////////         
 //////////////////////////////////////////////////////////////////////////////////////////////          
         }
     }
     else if (strcmp(command, "rate") == 0){
-        float R;
-        i = sscanf(input_msg, "%s %f",command, &R);
+        int R;
+        i = sscanf(input_msg, "%s %d",command, &R);
         if (i != 2){
             printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
         }
