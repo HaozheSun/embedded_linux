@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "ADXL345.h"
 #include "accel_wrappers.h"
+#include <time.h>
 
 void plot_pixel(int, int, char, char);
 /**             your part 4 user code here                   **/
