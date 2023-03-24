@@ -205,9 +205,11 @@ static ssize_t device_write(struct file *filp, const char *buffer, size_t length
     
             if (F == 0) {
                 ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, range | XL345_10BIT);
+                mg_per_lsb = (G * 2 * 1000) / 1024;
             }
             else if (F == 1) {
                 ADXL345_REG_WRITE(ADXL345_REG_DATA_FORMAT, range | XL345_FULL_RESOLUTION);
+                mg_per_lsb = 4;
             }
             else {
                 printk(KERN_ERR "Invalid command. Type '--' for a list of commands.\n");
