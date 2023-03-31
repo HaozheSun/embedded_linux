@@ -53,8 +53,10 @@ pthread_mutex_t volume_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t tid1;
 static pthread_t tid2;
 static volatile sig_atomic_t stop;
+int playing = 1;
 void catchSIGINT(int signum) {
     stop = 1;
+    playing = 0;
 }
 void* audio_thread(void* audio_ptr) {
     set_processor_affinity(1);			// assign this thread to CPU 1
@@ -190,6 +192,7 @@ int main(int argc, char* argv[]) {
     }
     stopwatch_open();
     LEDR_open();
+    stopwatch_stop();
     stopwatch_display();
     int press_count = 0;
     int release_count = 0;
@@ -199,6 +202,7 @@ int main(int argc, char* argv[]) {
     int press_key[500];
     int m, s,d;
     int record = 0;
+    int used_time = 0;
     memset(press_time, 0, sizeof(press_time));
     memset(release_time, 0, sizeof(release_time));
     memset(release_key, 0, sizeof(release_key));
@@ -221,14 +225,17 @@ int main(int argc, char* argv[]) {
                 memset(press_key, 0, sizeof(press_key));
                 press_count = 0;
                 release_count = 0;
+                used_time = 0;
                 LEDR_set(0b1);
             }
             else if (record == 1) {
                 record = 0;
                 stopwatch_stop();
+                stopwatch_read(&m, &s, &d);
+                used_time = stopwatch_to_second(m, s, d);
                 LEDR_set(0);
             }
-        }if (key_soc == 2&&record == 0) {
+        }else if (key_soc == 2&&record == 0) {
             LEDR_set(0b10);
             stopwatch_stop();
             stopwatch_set(59, 59, 99);
@@ -236,11 +243,12 @@ int main(int argc, char* argv[]) {
 
             int j = 0;
             int k = 0;
+            playing = 1;
 
-
-            while (1) {
+            while (playing) {
                 signal(SIGINT, catchSIGINT);
                 if (press_time[j] == 0 && release_key[k] == 0) {
+                    playing = 0;
                     stopwatch_stop();
                     break;
                 }
@@ -262,6 +270,13 @@ int main(int argc, char* argv[]) {
                     press = 1;
        
                     k++;
+                }
+
+                if (used_time > stopwatch_to_second(m, s, d)) {
+                    playing = 0;
+
+                    stopwatch_stop();
+                    break;
                 }
             }
 
@@ -326,6 +341,10 @@ int main(int argc, char* argv[]) {
 
             else if (key > 15 && key < 24) {
                 press = 1;
+                stopwatch_read(&m, &s, &d);
+                release_time[release_count] = stopwatch_to_second(m, s, d);
+                release_key[release_count] = key;
+                release_count++;
             }
         }
 
