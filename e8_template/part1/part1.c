@@ -31,7 +31,7 @@ int main(void){
     for (i=0; i<13; i++){
         for (j=0; j<2400; j++){
             while ((((*(audio_virtule + 1) >> 16) & 0xFF) == 0x00) || (((*(audio_virtule + 1) >> 24) & 0xFF) == 0x00));
-            *(audio_virtule + 2) = (int)MAX_VOLUME * sin(j * notes[i] );
+            *(audio_virtule + 2) = (int)MAX_VOLUME * sin(j * notes[i]);
             *(audio_virtule + 3) = (int)MAX_VOLUME * sin(j * notes[i]);
             
         }

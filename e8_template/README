@@ -47,3 +47,7 @@ These errors can be ignored.
 
 If you would like to clarify your interpretation of the exercise instructions 
 or provide any additional information to the grader, PLEASE TYPE IT HERE:
+In part 5,6. We set that when press KEY0 it will start to record, and press again it will done record.
+Press KEY1 will play it, but there will be no way to stop it until it finished. In order to play, it needs to press
+KEY0 to stop the recording first. The timestamp size is 500. 
+In part 4, we set the sin height to be a little bigger compare to the answer. Therefore sometime it may cut edges off the screen.

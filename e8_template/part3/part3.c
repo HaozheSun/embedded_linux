@@ -100,6 +100,14 @@ int main(int argc, char *argv[]){
 	// set a default keyboard
 	char *keyboard = "/dev/input/by-id/usb-Corsair_Corsair_Gaming_K55_RGB_Keyboard_AF7B95025F80CF26F5001C0640048000-event-kbd";
 	
+    if (argc != 2) {
+        printf("Could not open keyboard \n");
+        return -1;
+    }
+    else {
+        keyboard = argv[1];
+    }
+
 	// Open keyboard device
 	if ((fd_kb = open (keyboard, O_RDONLY | O_NONBLOCK)) == -1) {
 		printf ("Could not open %s\n", keyboard);
