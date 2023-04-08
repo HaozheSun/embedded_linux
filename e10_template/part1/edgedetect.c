@@ -191,14 +191,14 @@ void sobel_filter(struct pixel **data, signed int **conv_x, signed int **conv_y)
                 for (j = -1; j <= 1; j++) {
                     int x1 = x + i;
                     int y1 = y + j;
-                    if ((x1 < 0) || (x1 >= width) || (y1 < 0) || (y1 >= height)){
-                        sum_x+=0;
-                        sum_y+=0;
-                    }
-                    else{
-                        sum_x += image[y1][x1].r * sobel_x[i + 1][j + 1];
-                        sum_y += image[y1][x1].r * sobel_y[i + 1][j + 1];
-                    }
+                    if (x1<0) x1 = 0;
+                    if (y1<0) y1 = 0;
+                    if (x1>=width) x1 = width-1;
+                    if (y1>=height) y1 = height-1;
+                    
+                    sum_x += image[y1][x1].r * sobel_x[i + 1][j + 1];
+                    sum_y += image[y1][x1].r * sobel_y[i + 1][j + 1];
+                    
                     
                 }
             }

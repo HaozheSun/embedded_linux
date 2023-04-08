@@ -54,13 +54,16 @@ void flip (struct pixel *data, int width, int height){
      // declare image as a 2-D array so that we can use the syntax image[row][column]
      struct pixel (*image)[width] = (struct pixel (*)[width]) data;
 
-     for (i = 0; i < height / 2; ++i)
+     for (i = 0; i < height / 2; ++i){
          for (j = 0; j < width; ++j) {
 
              /**  please complete this function  **/
-
+            tmp = image[i][j];
+            image[i][j] = image[height - i - 1][j];
+            image[height - i - 1][j] = tmp;
 
          }
+     }
 }
 
 // The video IP cores used for edge detection require the RGB 24 bits of each pixel to be
@@ -69,6 +72,11 @@ void flip (struct pixel *data, int width, int height){
 void memcpy_consecutive_to_padded(struct pixel *from, volatile unsigned int *to, int pixels){
 
     /**  please implement this function  **/
+    int i;
+    for (i = 0; i < pixels; i++) {
+        *to = (from[i].r << 16) | (from[i].g << 8) | from[i].b;
+        to++;
+    }
 
 }
 

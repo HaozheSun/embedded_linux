@@ -70,6 +70,9 @@ void flip (struct pixel *data, int width, int height){
         for (j = 0; j < width; ++j) {
 
             /** please complete this function (you can reuse your part 2 solution)  **/
+            tmp = image[i][j];
+            image[i][j] = image[height - i - 1][j];
+            image[height - i - 1][j] = tmp;
         }
 }
 
@@ -79,12 +82,24 @@ void flip (struct pixel *data, int width, int height){
 void memcpy_consecutive_to_padded(struct pixel *from, volatile unsigned int *to, int pixels){
 
     /** please implement this function (you can reuse your part 2 solution)  **/
+    int i;
+    for (i = 0; i < pixels; i++) {
+        *to = (from[i].r << 16) | (from[i].g << 8) | from[i].b;
+        to++;
+    }
 }
 
 // Copies the word-aligned data (4 bytes) back into pixel data (3 bytes)
 void memcpy_padded_to_consecutive(volatile unsigned int *from, struct pixel *to, int pixels){
 
     /** please implement this function **/
+    int i;
+    for (i = 0; i < pixels; i++) {
+        to[i].r = (*from >> 16) & 0xFF;
+        to[i].g = (*from >> 8) & 0xFF;
+        to[i].b = *from & 0xFF;
+        from++;
+    }
 }
 
 int main(int argc, char *argv[]){
