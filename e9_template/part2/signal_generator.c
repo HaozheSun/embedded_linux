@@ -86,7 +86,8 @@ static int __init init_signal_senerator(void) {
         printk(KERN_INFO "/dev/%s driver registered\n", DEV_NAME);
         signal_senerator_registered = 1;
     }
-
+ int ret_val;
+    ret_val = (int)request_irq(TIMER0_IRQ, (irq_handler_t)irq_handler, IRQF_SHARED, "timer0", (void*)(irq_handler));
     LW_virtual = ioremap_nocache(LW_BRIDGE_BASE, LW_BRIDGE_SPAN);
 
     KEY_addr = (int*)(LW_virtual + KEY_BASE);
@@ -95,12 +96,12 @@ static int __init init_signal_senerator(void) {
     LEDR_addr = (int*)(LW_virtual + LEDR_BASE);
     TIMER0_addr = (int*)(LW_virtual + TIMER0_BASE);
     GPIO0_addr = (int*)(LW_virtual + GPIO0_BASE);
+	*(GPIO0_addr+1) = 1;
     update_frenquency();
 
 
 
-    int ret_val;
-    ret_val = (int)request_irq(TIMER0_IRQ, (irq_handler_t)irq_handler, IRQF_SHARED, "timer0", (void*)(irq_handler));
+   
 
     return err;
 
